@@ -15,12 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * block_sponsors block caps.
+ * block_sponsors block definition.
  *
- * @package    block_sponsorts
+ * @package    block_sponsors
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use block_sponsors\output\sponsors;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,6 +48,7 @@ class block_sponsors extends block_base {
      *
      * @return \stdClass|string|null
      * @throws coding_exception
+     * @throws moodle_exception
      */
     public function get_content() {
 
@@ -58,30 +61,26 @@ class block_sponsors extends block_base {
             return $this->content;
         }
 
-        $this->content = new stdClass();
-        $this->content->items = array();
-        $this->content->icons = array();
-        $this->content->footer = '';
-
-        // User/index.php expect course context, so get one if page has module context.
-        $currentcontext = $this->page->context->get_course_context(false);
-
-        if (!empty($this->config->text)) {
-            $this->content->text = $this->config->text;
-        }
-
         $this->content = '';
-        if (empty($currentcontext)) {
-            return $this->content;
-        }
-        if ($this->page->course->id == SITEID) {
-            $this->context->text .= "site context";
-        }
 
-        if (!empty($this->config->text)) {
-            $this->content->text .= $this->config->text;
-        }
+        if ($this->config) {
+            $this->content = new stdClass();
+            $this->content->items = array();
+            $this->content->icons = array();
+            $this->content->footer = '';
 
+            $orgnames = empty($this->config->orgnames) ? [] : $this->config->orgnames;
+            $orglinks = empty($this->config->orglinks) ? [] : $this->config->orglinks;
+            $orglogos = empty($this->config->orglogos) ? [] : $this->config->orglogos;
+            $renderer = $this->page->get_renderer('core');
+            $this->content->text = $renderer->render(
+                new sponsors(
+                    $orgnames,
+                    $orglinks,
+                    $orglogos,
+                    $this->context->id
+                ));
+        }
         return $this->content;
     }
 
@@ -113,15 +112,21 @@ class block_sponsors extends block_base {
     }
 
     /**
-     * Cron Job
-     *
-     * @return bool
+     * Serialize and store config data
+     * @param object $data
+     * @param false $nolongerused
      */
-    public function cron() {
-        mtrace("Hey, my cron script is running");
-
-        // Do something.
-
-        return true;
+    public function instance_config_save($data, $nolongerused = false) {
+        $config = clone($data);
+        // Save the images.
+        foreach ($data->orglogos as $index => $draftitemid) {
+            file_save_draft_area_files($draftitemid,
+                $this->context->id,
+                'block_sponsors',
+                'images',
+                $index,
+                array('subdirs' => true));
+        }
+        parent::instance_config_save($config, $nolongerused);
     }
 }

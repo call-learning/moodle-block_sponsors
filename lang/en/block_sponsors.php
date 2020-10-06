@@ -21,11 +21,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['blockstring'] = 'Block string';
-$string['descconfig'] = 'Description of the config section';
-$string['descfoo'] = 'Config description';
 $string['headerconfig'] = 'Config section header';
-$string['labelfoo'] = 'Config label';
-$string['sponsors:addinstance'] = 'Add a featured_courses block';
-$string['sponsors:myaddinstance'] = 'Add a featured_courses block to my moodle';
+$string['sponsors:addinstance'] = 'Add a sponsor block';
+$string['sponsors:myaddinstance'] = 'Add a sponsor block to my moodle';
 $string['pluginname'] = 'Sponsors';
+
+$string['config:orglinks'] = 'Organisation link';
+$string['config:orglogos'] = 'Organisation logo';
+$string['config:orgnames'] = 'Organisation name';
+$string['addmoreorgs'] = 'Add more organisations';

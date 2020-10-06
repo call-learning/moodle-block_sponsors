@@ -1,0 +1,44 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template block_sponsors/sponsors
+
+    This template renders the main content area for the mcms block.
+
+    Example context (json):
+    {
+    'orgs' => [{
+           'link' => 'urllink...',
+           'logourl' => 'urllink...',
+           'name' => 'orgname'
+
+    }],
+    'count' => 1
+    }
+}}
+<div class="container">
+    <div class="row">
+        {{# orgs}}
+            <div class="col-12 col-md-6">
+                <a href="{{link}}">
+                    <img class="img-fluid p-2 m-2" src="{{ logourl }}" role="presentation"
+                         alt="{{ name }}">
+                </a>
+            </div>
+        {{/ orgs}}
+    </div>
+</div>
