@@ -41,6 +41,23 @@ class block_sponsors_edit_form extends block_edit_form {
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
+        $mform->addElement('advcheckbox', 'config_showtitle', get_string('config:showtitle', 'block_sponsors'));
+        $mform->setDefault('config_showtitle', true);
+
+
+        $columnsarray = [
+            '6' => '2',
+            '4' => '3',
+            '3' => '4',
+            '2' => '6'
+        ];
+        $mform->addElement('select',
+            'config_columns',
+            get_string('config:columns', 'block_sponsors'),
+            $columnsarray
+        );
+        $mform->setDefault('config_columns', 6);
+
         $repeatarray = array();
         $repeatedoptions = array();
 

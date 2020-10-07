@@ -29,4 +29,6 @@ $string['pluginname'] = 'Sponsors';
 $string['config:orglinks'] = 'Organisation link';
 $string['config:orglogos'] = 'Organisation logo';
 $string['config:orgnames'] = 'Organisation name';
+$string['config:showtitle'] = 'Show block title';
+$string['config:columns'] = 'Column numbers';
 $string['addmoreorgs'] = 'Add more organisations';

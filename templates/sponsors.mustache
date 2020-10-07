@@ -27,13 +27,14 @@
            'name' => 'orgname'
 
     }],
-    'count' => 1
+    'count' => 1,
+    'colspan' => 6
     }
 }}
 <div class="container">
     <div class="row">
         {{# orgs}}
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-{{ colspan }}">
                 <a href="{{link}}">
                     <img class="img-fluid p-2 m-2" src="{{ logourl }}" role="presentation"
                          alt="{{ name }}">

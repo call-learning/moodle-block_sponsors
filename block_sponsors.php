@@ -78,10 +78,20 @@ class block_sponsors extends block_base {
                     $orgnames,
                     $orglinks,
                     $orglogos,
-                    $this->context->id
+                    $this->context->id,
+                    $this->config->columns
                 ));
         }
         return $this->content;
+    }
+
+
+    /**
+     * Default return is false - header will be shown
+     * @return boolean
+     */
+    public function hide_header() {
+        return empty($this->config->showtitle);
     }
 
     /**

@@ -43,6 +43,11 @@ class sponsors implements renderable, templatable {
     public $orgs = [];
 
     /**
+     * @var int colnum
+     */
+    public $colspan;
+
+    /**
      * sponsors constructor.
      * Retrieve all sponsors
      *
@@ -53,7 +58,7 @@ class sponsors implements renderable, templatable {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    public function __construct($orgnames, $orglinks, $orglogos, $blockcontextid) {
+    public function __construct($orgnames, $orglinks, $orglogos, $blockcontextid, $colspan = 6) {
         $numborgs = empty($orgnames) ? 1 : count($orgnames);
         $numborgs = max($numborgs, empty($orglinks) ? 1 : count($orglinks));
         $numborgs = max($numborgs, empty($orglogos) ? 1 : count($orglogos));
@@ -86,6 +91,7 @@ class sponsors implements renderable, templatable {
             $neworg->name = !empty($orgnames[$orgindex]) ? $orgnames[$orgindex] : '';
             $this->orgs[] = $neworg;
         }
+        $this->colspan = $colspan;
     }
 
     /**
@@ -97,7 +103,8 @@ class sponsors implements renderable, templatable {
     public function export_for_template(renderer_base $renderer) {
         $exportedvalue = [
             'orgs' => array_values((array) $this->orgs),
-            'count' => count($this->orgs)
+            'count' => count($this->orgs),
+            'colspan' => $this->colspan
         ];
         return $exportedvalue;
     }
