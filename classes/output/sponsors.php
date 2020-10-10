@@ -58,7 +58,7 @@ class sponsors implements renderable, templatable {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    public function __construct($orgnames, $orglinks, $orglogos, $blockcontextid, $colspan = 6) {
+    public function __construct($orgnames, $orglinks, $orglogos, $blockcontextid, $colspan) {
         $numborgs = empty($orgnames) ? 1 : count($orgnames);
         $numborgs = max($numborgs, empty($orglinks) ? 1 : count($orglinks));
         $numborgs = max($numborgs, empty($orglogos) ? 1 : count($orglogos));
@@ -89,9 +89,11 @@ class sponsors implements renderable, templatable {
             }
             $neworg->link = !empty($orglinks[$orgindex]) ? (new \moodle_url($orglinks[$orgindex]))->out() : '';
             $neworg->name = !empty($orgnames[$orgindex]) ? $orgnames[$orgindex] : '';
-            $this->orgs[] = $neworg;
+                        $this->orgs[] = $neworg;
         }
-        $this->colspan = $colspan;
+        if ($colspan) {
+            $this->colspan = $colspan;
+        }
     }
 
     /**

@@ -41,22 +41,30 @@ class block_sponsors_edit_form extends block_edit_form {
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
+        // Title of the block.
+        $mform->addElement('text', 'config_title', get_string('config:title', 'block_sponsors'));
+        $mform->setDefault('config_title', get_string('title', 'block_sponsors'));
+        $mform->setType('config_title', PARAM_TEXT);
+
+
         $mform->addElement('advcheckbox', 'config_showtitle', get_string('config:showtitle', 'block_sponsors'));
         $mform->setDefault('config_showtitle', true);
 
-
         $columnsarray = [
-            '6' => '2',
-            '4' => '3',
-            '3' => '4',
-            '2' => '6'
+            block_sponsors::COL_NUMBER_AUTO => get_string('columns', 'block_sponsors', 'auto'),
+            '12' => get_string('columns', 'block_sponsors', 1),
+            '6' => get_string('columns', 'block_sponsors', 2),
+            '4' => get_string('columns', 'block_sponsors', 3),
+            '3' => get_string('columns', 'block_sponsors', 4),
+            '2' => get_string('columns', 'block_sponsors', 6),
+            '1' => get_string('columns', 'block_sponsors', 12)
         ];
         $mform->addElement('select',
             'config_columns',
             get_string('config:columns', 'block_sponsors'),
             $columnsarray
         );
-        $mform->setDefault('config_columns', 6);
+        $mform->setDefault('config_columns', block_sponsors::COL_NUMBER_AUTO);
 
         $repeatarray = array();
         $repeatedoptions = array();

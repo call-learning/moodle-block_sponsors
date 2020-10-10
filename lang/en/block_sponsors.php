@@ -25,10 +25,15 @@ $string['headerconfig'] = 'Config section header';
 $string['sponsors:addinstance'] = 'Add a sponsor block';
 $string['sponsors:myaddinstance'] = 'Add a sponsor block to my moodle';
 $string['pluginname'] = 'Sponsors';
+$string['title'] = 'Sponsors';
 
+$string['config:title'] = 'Title';
 $string['config:orglinks'] = 'Organisation link';
 $string['config:orglogos'] = 'Organisation logo';
 $string['config:orgnames'] = 'Organisation name';
 $string['config:showtitle'] = 'Show block title';
+
+
 $string['config:columns'] = 'Column numbers';
+$string['columns'] = '{$a} Column';
 $string['addmoreorgs'] = 'Add more organisations';

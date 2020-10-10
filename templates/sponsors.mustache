@@ -32,11 +32,11 @@
     }
 }}
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-md-center">
         {{# orgs}}
-            <div class="col-12 col-md-{{ colspan }}">
+            <div class="col-12 {{#colspan}}col-md-{{.}}{{/colspan}} {{^colspan}}col-md{{/colspan}} text-center">
                 <a href="{{link}}">
-                    <img class="img-fluid p-2 m-2" src="{{ logourl }}" role="presentation"
+                    <img class="img-fluid p-2" src="{{ logourl }}" role="presentation"
                          alt="{{ name }}">
                 </a>
             </div>

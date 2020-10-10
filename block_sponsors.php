@@ -35,12 +35,26 @@ defined('MOODLE_INTERNAL') || die();
 class block_sponsors extends block_base {
 
     /**
+     * Column numbers
+     */
+    const COL_NUMBER_AUTO = 0;
+
+    /**
      * Init function
      *
      * @throws coding_exception
      */
     public function init() {
-        $this->title = get_string('pluginname', 'block_sponsors');
+        $this->title = get_string('title', 'block_sponsors');
+    }
+
+    /**
+     * Update the block title from config values
+     */
+    public function specialization() {
+        if (!empty($this->config->title)) {
+            $this->title = $this->config->title;
+        }
     }
 
     /**
@@ -79,15 +93,15 @@ class block_sponsors extends block_base {
                     $orglinks,
                     $orglogos,
                     $this->context->id,
-                    $this->config->columns
+                    empty($this->config->columns) ? self::COL_NUMBER_AUTO : $this->config->columns
                 ));
         }
         return $this->content;
     }
 
-
     /**
      * Default return is false - header will be shown
+     *
      * @return boolean
      */
     public function hide_header() {
@@ -123,6 +137,7 @@ class block_sponsors extends block_base {
 
     /**
      * Serialize and store config data
+     *
      * @param object $data
      * @param false $nolongerused
      */
