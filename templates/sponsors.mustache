@@ -17,19 +17,21 @@
 {{!
     @template block_sponsors/sponsors
 
-    This template renders the main content area for the mcms block.
+    This template renders the main content area for the sponsors block.
 
     Example context (json):
     {
-    'orgs' => [{
-           'link' => 'urllink...',
-           'logourl' => 'urllink...',
-           'name' => 'orgname'
-
-    }],
-    'count' => 1,
-    'colspan' => 6
+       "orgs":[
+          {
+             "link":"urllink...",
+             "logourl":"logourl",
+             "name":"orgname"
+          }
+       ],
+       "count":1,
+       "colspan":6
     }
+
 }}
 <div class="container">
     <div class="row justify-content-md-center">

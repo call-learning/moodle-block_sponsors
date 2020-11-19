@@ -144,6 +144,7 @@ class block_sponsors extends block_base {
     public function instance_config_save($data, $nolongerused = false) {
         $config = clone($data);
         // Save the images.
+
         foreach ($data->orglogos as $index => $draftitemid) {
             file_save_draft_area_files($draftitemid,
                 $this->context->id,
@@ -151,6 +152,20 @@ class block_sponsors extends block_base {
                 'images',
                 $index,
                 array('subdirs' => true));
+        }
+        // Here we make sure we copy the image id into the
+        // block parameter. This is then used in save_data
+        // to setup the block to the right image.
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($this->context->id,
+            'block_sponsors',
+            'images'
+        );
+        foreach ($files as $file) {
+            if (in_array($file->get_filename(), array('.', '..'))) {
+                continue;
+            }
+            $config->orglogos[$file->get_itemid()] = $file->get_id();
         }
         parent::instance_config_save($config, $nolongerused);
     }

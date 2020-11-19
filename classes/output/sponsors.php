@@ -55,8 +55,9 @@ class sponsors implements renderable, templatable {
      * @param array  $orglinks
      * @param array  $orglogos
      * @param int $blockcontextid
+     * @param int $colspan
      * @throws \coding_exception
-     * @throws \moodle_exception
+     * @throws \moodle_exception*
      */
     public function __construct($orgnames, $orglinks, $orglogos, $blockcontextid, $colspan) {
         $numborgs = empty($orgnames) ? 1 : count($orgnames);

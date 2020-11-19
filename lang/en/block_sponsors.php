@@ -28,12 +28,13 @@ $string['pluginname'] = 'Sponsors';
 $string['title'] = 'Sponsors';
 
 $string['config:title'] = 'Title';
-$string['config:orglinks'] = 'Organisation link';
-$string['config:orglogos'] = 'Organisation logo';
-$string['config:orgnames'] = 'Organisation name';
+$string['config:orglinks'] = 'Organisation {no} link';
+$string['config:orglogos'] = 'Organisation {no} logo';
+$string['config:orgnames'] = 'Organisation {no} name';
 $string['config:showtitle'] = 'Show block title';
 
 
 $string['config:columns'] = 'Column numbers';
-$string['columns'] = '{$a} Column';
+$string['column'] = '{$a} Column';
+$string['columns:plural'] = '{$a} Columns';
 $string['addmoreorgs'] = 'Add more organisations';
