@@ -93,14 +93,14 @@ class block_sponsors_test extends advanced_testcase {
             <div class="col-12 col-md-2  text-center">
                 <a href="http://moodle.com/0">
                     <img class="img-fluid p-2" '
-            . 'src="https://www.example.com/moodle/pluginfile.php/188001/block_sponsors/images/0/img1.png" role="presentation"
+            . 'src="https://www.example.com/moodle/pluginfile.php/'.$block->context->id.'/block_sponsors/images/0/img1.png" role="presentation"
                          alt="org0">
                 </a>
             </div>
             <div class="col-12 col-md-2  text-center">
                 <a href="http://moodle.com/1">
                     <img class="img-fluid p-2" '
-            . 'src="https://www.example.com/moodle/pluginfile.php/188001/block_sponsors/images/1/img2.png" role="presentation"
+            . 'src="https://www.example.com/moodle/pluginfile.php/'.$block->context->id.'/block_sponsors/images/1/img2.png" role="presentation"
                          alt="org1">
                 </a>
             </div>
