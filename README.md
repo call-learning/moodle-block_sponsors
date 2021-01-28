@@ -1,5 +1,7 @@
 # Sponsors block #
 
+[![Build Status](https://travis-ci.org/call-learning/moodle-block-sponsors.svg?branch=master)](https://travis-ci.org/call-learning/moodle-block-sponsors)
+
 A simple block to show a series of logos and links associated with them.
 
 ## License ##

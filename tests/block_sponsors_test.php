@@ -36,11 +36,13 @@ class block_sponsors_test extends advanced_testcase {
 
     /**
      * Current block
+     *
      * @var block_base|false|null
      */
     protected $block = null;
     /**
      * Current user
+     *
      * @var stdClass|null
      */
     protected $user = null;
@@ -49,7 +51,6 @@ class block_sponsors_test extends advanced_testcase {
      * Basic setup for these tests.
      */
     public function setUp() {
-        global $CFG;
         $this->resetAfterTest(true);
         $this->user = $this->getDataGenerator()->create_user();
         $this->setUser($this->user);
@@ -88,25 +89,10 @@ class block_sponsors_test extends advanced_testcase {
         $block = block_instance_by_id($this->block->instance->id);
         $content = $block->get_content();
         $this->assertNotNull($content->text);
-        $expected = '<div class="container">
-    <div class="row justify-content-md-center">
-            <div class="col-12 col-md-2  text-center">
-                <a href="http://moodle.com/0">
-                    <img class="img-fluid p-2" '
-            . 'src="https://www.example.com/moodle/pluginfile.php/188001/block_sponsors/images/0/img1.png" role="presentation"
-                         alt="org0">
-                </a>
-            </div>
-            <div class="col-12 col-md-2  text-center">
-                <a href="http://moodle.com/1">
-                    <img class="img-fluid p-2" '
-            . 'src="https://www.example.com/moodle/pluginfile.php/188001/block_sponsors/images/1/img2.png" role="presentation"
-                         alt="org1">
-                </a>
-            </div>
-    </div>
-</div>';
-        $this->assertEquals($expected, $content->text);
+        $this->assertContains("/block_sponsors/images/0/img1.png", $content->text);
+        $this->assertContains("/block_sponsors/images/1/img2.png", $content->text);
+        $this->assertContains('<a href="http://moodle.com/0">', $content->text);
+        $this->assertContains('<a href="http://moodle.com/1">', $content->text);
     }
 
     /**
@@ -140,12 +126,12 @@ class block_sponsors_test extends advanced_testcase {
         global $CFG;
         $block = block_instance_by_id($this->block->instance->id);
         $usercontext = context_user::instance($this->user->id);
-        $files = [];
         $configdata = (object) [
             'title' => 'block title',
             'showtitle' => true,
             'columns' => 2
         ];
+        $configdata->orglogos = [];
         foreach ($imagesnames as $index => $filename) {
             $draftitemid = file_get_unused_draft_itemid();
             $filerecord = array(
@@ -159,12 +145,12 @@ class block_sponsors_test extends advanced_testcase {
             // Create an area to upload the file.
             $fs = get_file_storage();
             // Create a file from the string that we made earlier.
-            $files[] = $fs->create_file_from_pathname($filerecord,
+            $file = $fs->create_file_from_pathname($filerecord,
                 $CFG->dirroot . '/blocks/sponsors/tests/fixtures/bookmark-new.png');
             $configdata->orgnames[] = 'org' . $index;
             $configdata->orglinks[] = 'http://moodle.com/' . $index;
+            $configdata->orglogos[] = $file->get_itemid();
         }
-        $configdata->orglogos = [$files[0]->get_itemid(), $files[1]->get_itemid()];
         $block->instance_config_save((object) $configdata);
     }
 }

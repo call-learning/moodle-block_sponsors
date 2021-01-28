@@ -83,16 +83,17 @@ class block_sponsors_edit_form extends block_edit_form {
             'config_orglogos',
             get_string('config:orglogos', 'block_sponsors'),
             null,
-            array('subdirs' => 0, 'maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1,
-                'context' => $this->block->context)
+            $this->get_file_manager_options()
         );
-        $repeatedoptions['config_orglogos']['type'] = PARAM_RAW;
 
         $numborgs = $this->get_current_repeats();
         $this->repeat_elements($repeatarray, $numborgs,
             $repeatedoptions,
             'orgs_repeats', 'orgs_add_fields', 1,
-            get_string('addmoreorgs', 'block_sponsors')
+            get_string('addmoreorgs', 'block_sponsors'),
+            false,
+            'orgs_delete',
+            get_string('removelastorg', 'block_sponsors')
         );
     }
 
@@ -129,8 +130,7 @@ class block_sponsors_edit_form extends block_edit_form {
                     'block_sponsors',
                     'images',
                     $index, // Index is the logo index.
-                    array('subdirs' => 0, 'maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED, 'maxfiles' => 1,
-                        'context' => $this->block->context));
+                    $this->get_file_manager_options());
 
                 $filefields->{$fieldname}[$index] = $draftitemid;
             }
@@ -145,5 +145,169 @@ class block_sponsors_edit_form extends block_edit_form {
         $numborgs = empty($this->block->config->orgnames) ? 1 : count($this->block->config->orgnames);
         $numborgs = max($numborgs, empty($this->block->config->orglinks) ? 1 : count($this->block->config->orglinks));
         return max($numborgs, empty($this->block->config->orglogos) ? 1 : count($this->block->config->orglogos));
+    }
+
+    /**
+     * Get usual options for filemanager
+     *
+     * @return array
+     */
+    protected function get_file_manager_options() {
+        return array('subdirs' => 0,
+            'maxbytes' => FILE_AREA_MAX_BYTES_UNLIMITED,
+            'maxfiles' => 1,
+            'context' => $this->block->context);
+    }
+
+    /**
+     * Method to add a repeating group of elements to a form.
+     *
+     * We can also remove the last element of the list.
+     *
+     * @param array $elementobjs Array of elements or groups of elements that are to be repeated
+     * @param int $repeats no of times to repeat elements initially
+     * @param array $options a nested array. The first array key is the element name.
+     *    the second array key is the type of option to set, and depend on that option,
+     *    the value takes different forms.
+     *         'default'    - default value to set. Can include '{no}' which is replaced by the repeat number.
+     *         'type'       - PARAM_* type.
+     *         'helpbutton' - array containing the helpbutton params.
+     *         'disabledif' - array containing the disabledIf() arguments after the element name.
+     *         'rule'       - array containing the addRule arguments after the element name.
+     *         'expanded'   - whether this section of the form should be expanded by default. (Name be a header element.)
+     *         'advanced'   - whether this element is hidden by 'Show more ...'.
+     * @param string $repeathiddenname name for hidden element storing no of repeats in this form
+     * @param string $addfieldsname name for button to add more fields
+     * @param int $addfieldsno how many fields to add at a time
+     * @param string $addstring name of button, {no} is replaced by no of blanks that will be added.
+     * @param bool $addbuttoninside if true, don't call closeHeaderBefore($addfieldsname). Default false.
+     * @param string $deletefieldsname name of the button that will trigger the deletion of the repeat element
+     * @param string $deletestring name for button to remove the last field
+     * @return int no of repeats of element in this page
+     * @throws coding_exception
+     */
+    public function repeat_elements($elementobjs, $repeats, $options, $repeathiddenname,
+        $addfieldsname,
+        $addfieldsno = 5,
+        $addstring = null,
+        $addbuttoninside = false,
+        $deletefieldsname = null,
+        $deletestring = null
+    ) {
+        $repeats = $this->optional_param($repeathiddenname, $repeats, PARAM_INT);
+        if ($deletefieldsname) {
+            $removefields = $this->optional_param($deletefieldsname, '', PARAM_TEXT);
+            if (!empty($removefields)) {
+                $repeats -= 1; // Remove last course.
+            }
+            if ($deletestring === null) {
+                $deletestring = get_string('delete', 'moodle');
+            }
+        }
+        if ($addstring === null) {
+            $addstring = get_string('addfields', 'form', $addfieldsno);
+        } else {
+            $addstring = str_ireplace('{no}', $addfieldsno, $addstring);
+        }
+
+        $addfields = $this->optional_param($addfieldsname, '', PARAM_TEXT);
+        if (!empty($addfields)) {
+            $repeats += $addfieldsno;
+        }
+        $mform =& $this->_form;
+        $mform->registerNoSubmitButton($addfieldsname);
+        $mform->addElement('hidden', $repeathiddenname, $repeats);
+        $mform->setType($repeathiddenname, PARAM_INT);
+        // Value not to be overridden by submitted value.
+        $mform->setConstants(array($repeathiddenname => $repeats));
+        $namecloned = array();
+        for ($i = 0; $i < $repeats; $i++) {
+            foreach ($elementobjs as $elementobj) {
+                $elementclone = fullclone($elementobj);
+                $this->repeat_elements_fix_clone($i, $elementclone, $namecloned);
+
+                if ($elementclone instanceof HTML_QuickForm_group && !$elementclone->_appendName) {
+                    foreach ($elementclone->getElements() as $el) {
+                        $this->repeat_elements_fix_clone($i, $el, $namecloned);
+                    }
+                    $elementclone->setLabel(str_replace('{no}', $i + 1, $elementclone->getLabel()));
+                }
+
+                $mform->addElement($elementclone);
+            }
+        }
+        for ($i = 0; $i < $repeats; $i++) {
+            foreach ($options as $elementname => $elementoptions) {
+                $pos = strpos($elementname, '[');
+                if ($pos !== false) {
+                    $realelementname = substr($elementname, 0, $pos) . "[$i]";
+                    $realelementname .= substr($elementname, $pos);
+                } else {
+                    $realelementname = $elementname . "[$i]";
+                }
+                foreach ($elementoptions as $option => $params) {
+
+                    switch ($option) {
+                        case 'default' :
+                            $mform->setDefault($realelementname, str_replace('{no}', $i + 1, $params));
+                            break;
+                        case 'helpbutton' :
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'addHelpButton'), $params);
+                            break;
+                        case 'disabledif' :
+                            foreach ($namecloned as $num => $name) {
+                                if ($params[0] == $name) {
+                                    $params[0] = $params[0] . "[$i]";
+                                    break;
+                                }
+                            }
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'disabledIf'), $params);
+                            break;
+                        case 'hideif' :
+                            foreach ($namecloned as $num => $name) {
+                                if ($params[0] == $name) {
+                                    $params[0] = $params[0] . "[$i]";
+                                    break;
+                                }
+                            }
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'hideIf'), $params);
+                            break;
+                        case 'rule' :
+                            if (is_string($params)) {
+                                $params = array(null, $params, null, 'client');
+                            }
+                            $params = array_merge(array($realelementname), $params);
+                            call_user_func_array(array(&$mform, 'addRule'), $params);
+                            break;
+
+                        case 'type':
+                            $mform->setType($realelementname, $params);
+                            break;
+
+                        case 'expanded':
+                            $mform->setExpanded($realelementname, $params);
+                            break;
+
+                        case 'advanced' :
+                            $mform->setAdvanced($realelementname, $params);
+                            break;
+                    }
+                }
+            }
+        }
+        $mform->addElement('submit', $addfieldsname, $addstring);
+        if ($deletefieldsname) {
+            $mform->addElement('submit', $deletefieldsname, $deletestring);
+            $mform->registerNoSubmitButton($deletefieldsname);
+        }
+
+        if (!$addbuttoninside) {
+            $mform->closeHeaderBefore($addfieldsname);
+        }
+
+        return $repeats;
     }
 }

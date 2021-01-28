@@ -45,7 +45,7 @@ Feature: Adding and configuring Sponsors block
     Then I should see "Organisation 1 name"
     Then I should see "Organisation 1 link"
     Then I should see "Organisation 1 logo"
-    And I press "Add more organisations"
+    And I press "Add 1 more organisations"
     Given I set the field "Organisation 1 name" to "First Sponsor"
     Given I set the field "Organisation 1 link" to "http://www.sponsor1.fr"
     Given I set the field "Organisation 2 name" to "Second Sponsor"

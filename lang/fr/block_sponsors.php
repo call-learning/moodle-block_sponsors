@@ -15,24 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_sponsors', language 'en'
+ * Strings for component 'block_sponsors', language 'fr'
  *
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['addmoreorgs'] = 'Add {no} more organisations';
-$string['column'] = '{$a} Column';
-$string['columns:plural'] = '{$a} Columns';
-$string['config:title'] = 'Title';
-$string['config:orglinks'] = 'Organisation {no} link';
-$string['config:orglogos'] = 'Organisation {no} logo';
-$string['config:orgnames'] = 'Organisation {no} name';
-$string['config:showtitle'] = 'Show block title';
-$string['config:columns'] = 'Column numbers';
-$string['headerconfig'] = 'Config section header';
+$string['addmoreorgs'] = 'Ajouter {no} organisations';
+$string['column'] = '{$a} colonne';
+$string['columns:plural'] = '{$a} colonnes';
+$string['config:title'] = 'Titre';
+$string['config:orglinks'] = 'Lien vers l\'organisation {no}';
+$string['config:orglogos'] = 'Logo de l\'organisation {no}';
+$string['config:orgnames'] = 'Nom de l\'organisation  {no}';
+$string['config:showtitle'] = 'Voir le titre du block';
+$string['config:columns'] = 'Nombre de colonnes';
+$string['headerconfig'] = 'Section d\'entête';
 $string['pluginname'] = 'Sponsors';
-$string['removelastorg'] = 'Remove last organisation';
-$string['sponsors:addinstance'] = 'Add a sponsor block';
-$string['sponsors:myaddinstance'] = 'Add a sponsor block to my moodle';
+$string['removelastorg'] = 'Retire la dernière organisation';
+$string['sponsors:addinstance'] = 'Ajouter un block sponsor';
+$string['sponsors:myaddinstance'] = 'Ajouter un block sponsor au tableau de bord';
 $string['title'] = 'Sponsors';
