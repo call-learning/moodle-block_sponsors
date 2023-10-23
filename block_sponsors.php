@@ -13,22 +13,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * block_sponsors block definition.
- *
- * @package    block_sponsors
- * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning.fr>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use block_sponsors\output\sponsors;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class block_sponsors
  *
+ * @package  block_sponsors
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -79,8 +69,8 @@ class block_sponsors extends block_base {
 
         if ($this->config) {
             $this->content = new stdClass();
-            $this->content->items = array();
-            $this->content->icons = array();
+            $this->content->items = [];
+            $this->content->icons = [];
             $this->content->footer = '';
 
             $orgnames = empty($this->config->orgnames) ? [] : $this->config->orgnames;
@@ -114,7 +104,7 @@ class block_sponsors extends block_base {
      * @return array
      */
     public function applicable_formats() {
-        return array('all' => true);
+        return ['all' => true];
     }
 
     /**
@@ -151,7 +141,7 @@ class block_sponsors extends block_base {
                 'block_sponsors',
                 'images',
                 $index,
-                array('subdirs' => true));
+                ['subdirs' => true]);
         }
         // Here we make sure we copy the image id into the
         // block parameter. This is then used in save_data
@@ -162,7 +152,7 @@ class block_sponsors extends block_base {
             'images'
         );
         foreach ($files as $file) {
-            if (in_array($file->get_filename(), array('.', '..'))) {
+            if (in_array($file->get_filename(), ['.', '..'])) {
                 continue;
             }
             $config->orglogos[$file->get_itemid()] = $file->get_id();

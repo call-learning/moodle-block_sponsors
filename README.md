@@ -1,8 +1,8 @@
 # Sponsors block #
 
-[![Build Status](https://travis-ci.org/call-learning/moodle-block-sponsors.svg?branch=master)](https://travis-ci.org/call-learning/moodle-block-sponsors)
-
 A simple block to show a series of logos and links associated with them.
+
+[![Moodle Plugin CI](https://github.com/call-learning/moodle-block_sponsors/actions/workflows/ci.yml/badge.svg)](https://github.com/call-learning/moodle-block_sponsors/actions/workflows/ci.yml)
 
 ## License ##
 

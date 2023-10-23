@@ -21,10 +21,15 @@
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace block_sponsors;
+use advanced_testcase;
+use block_base;
+use block_sponsors;
 use block_sponsors\output\sponsors;
-
-defined('MOODLE_INTERNAL') || die();
+use context_system;
+use context_user;
+use moodle_page;
+use stdClass;
 
 /**
  * Unit tests for block_sponsors
@@ -50,7 +55,7 @@ class block_sponsors_test extends advanced_testcase {
     /**
      * Basic setup for these tests.
      */
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest(true);
         $this->user = $this->getDataGenerator()->create_user();
         $this->setUser($this->user);
@@ -77,30 +82,33 @@ class block_sponsors_test extends advanced_testcase {
         $block = end($blocks);
         $block = block_instance($blockname, $block->instance);
         $this->block = $block;
-        $this->upload_files_in_block(array('img1.png', 'img2.png'));
+        $this->upload_files_in_block(['img1.png', 'img2.png']);
         $this->block = $block;
     }
 
     /**
      * Test that output is as expected. This also test file loading into the plugin.
+     * @covers \block_sponsors::get_content
      */
     public function test_simple_content() {
         // We need to reload the block so config is there.
         $block = block_instance_by_id($this->block->instance->id);
         $content = $block->get_content();
         $this->assertNotNull($content->text);
-        $this->assertContains("/block_sponsors/images/0/img1.png", $content->text);
-        $this->assertContains("/block_sponsors/images/1/img2.png", $content->text);
-        $this->assertContains('<a href="http://moodle.com/0">', $content->text);
-        $this->assertContains('<a href="http://moodle.com/1">', $content->text);
+        $this->assertStringContainsString("/block_sponsors/images/0/img1.png", $content->text);
+        $this->assertStringContainsString("/block_sponsors/images/1/img2.png", $content->text);
+        $this->assertStringContainsString('<a href="http://moodle.com/0"', $content->text);
+        $this->assertStringContainsString('<a href="http://moodle.com/1"', $content->text);
     }
 
     /**
      * Test that output is as expected. This also test file loading into the plugin.
+     *
+     * @covers \block_sponsors::get_content
      */
     public function test_output_renderer_change_files() {
         // We need to reload the block so config is there.
-        $this->upload_files_in_block(array('img4.png', 'img5.png'));
+        $this->upload_files_in_block(['img4.png', 'img5.png']);
         $block = block_instance_by_id($this->block->instance->id);
         $renderer = $this->block->page->get_renderer('core');
         $renderable = new sponsors(
@@ -119,8 +127,6 @@ class block_sponsors_test extends advanced_testcase {
      * Upload a file/image in the block
      *
      * @param array $imagesnames
-     * @throws file_exception
-     * @throws stored_file_creation_exception
      */
     protected function upload_files_in_block($imagesnames) {
         global $CFG;
@@ -129,19 +135,19 @@ class block_sponsors_test extends advanced_testcase {
         $configdata = (object) [
             'title' => 'block title',
             'showtitle' => true,
-            'columns' => 2
+            'columns' => 2,
         ];
         $configdata->orglogos = [];
         foreach ($imagesnames as $index => $filename) {
             $draftitemid = file_get_unused_draft_itemid();
-            $filerecord = array(
+            $filerecord = [
                 'contextid' => $usercontext->id,
                 'component' => 'user',
                 'filearea' => 'draft',
                 'itemid' => $draftitemid,
                 'filepath' => '/',
                 'filename' => $filename,
-            );
+            ];
             // Create an area to upload the file.
             $fs = get_file_storage();
             // Create a file from the string that we made earlier.

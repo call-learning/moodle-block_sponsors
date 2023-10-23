@@ -13,17 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-/**
- * Renderable
- *
- * @package   block_sponsors
- * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning.fr>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace block_sponsors\output;
-defined('MOODLE_INTERNAL') || die();
 
 use renderable;
 use renderer_base;
@@ -73,7 +63,9 @@ class sponsors implements renderable, templatable {
             }
             $allfiles = $fs->get_area_files($blockcontextid, 'block_sponsors', 'images', $orgindex);
             foreach ($allfiles as $file) {
-                if ($file->is_valid_image()) {
+                // Here if the file does not exist on the disk for some reason this will raise warning that
+                // can lead to a broken page.
+                if (@$file->is_valid_image()) {
                     $neworg->logourl = \moodle_url::make_pluginfile_url(
                         $file->get_contextid(),
                         $file->get_component(),
@@ -107,7 +99,7 @@ class sponsors implements renderable, templatable {
         $exportedvalue = [
             'orgs' => array_values((array) $this->orgs),
             'count' => count($this->orgs),
-            'colspan' => $this->colspan
+            'colspan' => $this->colspan,
         ];
         return $exportedvalue;
     }

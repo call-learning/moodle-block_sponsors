@@ -13,23 +13,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Edit Form
+ * Block sponsors lib file
  *
  * @package   block_sponsors
  * @copyright 2020 - CALL Learning - Laurent David <laurent@call-learning.fr>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Get plugin file for this block (identical to HTML block)
  *
  * @param stdClass $course course object
  * @param stdClass $birecordorcm block instance record
- * @param stdClass $context context object
+ * @param context $context context object
  * @param string $filearea file area
  * @param array $args extra arguments
  * @param bool $forcedownload whether or not force download
@@ -42,7 +38,8 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @category  files
  */
-function block_sponsors_pluginfile($course, $birecordorcm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+function block_sponsors_pluginfile($course, $birecordorcm, context $context, $filearea, $args, $forcedownload,
+    array $options = []) {
     global $CFG, $USER;
 
     if ($context->contextlevel != CONTEXT_BLOCK) {
@@ -78,8 +75,8 @@ function block_sponsors_pluginfile($course, $birecordorcm, $context, $filearea, 
     $filename = array_pop($args);
     $itemid = array_shift($args);
     $filepath = $args ? '/' . implode('/', $args) . '/' : '/';
-
-    if (!$file = $fs->get_file($context->id, 'block_sponsors', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
+    $file = $fs->get_file($context->id, 'block_sponsors', $filearea, $itemid, $filepath, $filename);
+    if (!$file || $file->is_directory()) {
         send_file_not_found();
     }
 

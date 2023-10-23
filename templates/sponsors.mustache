@@ -35,13 +35,12 @@
 }}
 <div class="block-sponsors container">
     <div class="row justify-content-md-center">
-        {{# orgs}}
+        {{#orgs}}
             <div class="col-12 {{#colspan}}col-md-{{.}}{{/colspan}} {{^colspan}}col-md{{/colspan}} text-center">
                 <a href="{{link}}" target="_blank">
-                    <img class="logo img-fluid p-2" src="{{ logourl }}" role="presentation"
-                         alt="{{ name }}">
+                    <img class="logo img-fluid p-2" src="{{ logourl }}"  alt="{{ name }}">
                 </a>
             </div>
-        {{/ orgs}}
+        {{/orgs}}
     </div>
 </div>

@@ -1,10 +1,9 @@
-@block @block_sponsors
+@block @block_sponsors @javascript @_file_upload
 Feature: Adding and configuring Sponsors block
   In order to have the Sponsors block used
   As a admin
   I need to add the Sponsors block to the front page
 
-  @javascript @_file_upload @runonly
   Scenario: Adding Sponsors block and I change the image, this should result in the new image being displayed.
     Given I log in as "admin"
     And I am on site homepage
@@ -22,14 +21,13 @@ Feature: Adding and configuring Sponsors block
     Given I set the field "Organisation 1 link" to "http://www.sponsor1.fr"
     And I upload "blocks/sponsors/tests/fixtures/bookmark-new.png" file to "Organisation 1 logo" filemanager
     And I press "Save changes"
-    Then the image at "//*[contains(@class, 'block_sponsors')]//img[contains(@src, 'pluginfile.php') and @alt='First Sponsor']" "xpath_element" should be identical to "blocks/sponsors/tests/fixtures/bookmark-new.png"
+    Then the image at "First Sponsor" "block_sponsors > Sponsor Image" should be identical to "blocks/sponsors/tests/fixtures/bookmark-new.png"
     And I configure the "My sponsor" block
     And I delete "bookmark-new.png" from "Organisation 1 logo" filemanager
     And I upload "blocks/sponsors/tests/fixtures/document-edit.png" file to "Organisation 1 logo" filemanager
     And I press "Save changes"
-    Then the image at "//*[contains(@class, 'block_sponsors')]//img[contains(@src, 'pluginfile.php') and @alt='First Sponsor']" "xpath_element" should be identical to "blocks/sponsors/tests/fixtures/document-edit.png"
+    Then the image at "First Sponsor" "block_sponsors > Sponsor Image" should be identical to "blocks/sponsors/tests/fixtures/document-edit.png"
 
-  @javascript @_file_upload
   Scenario: Adding Sponsors block and several images
     Given I log in as "admin"
     And I am on site homepage
@@ -55,8 +53,8 @@ Feature: Adding and configuring Sponsors block
     # does not appear to behat as visible. A workaround here is to save them in sequence.
     And I upload "blocks/sponsors/tests/fixtures/bookmark-new.png" file to "Organisation 1 logo" filemanager
     And I press "Save changes"
-    Then the image at "//*[contains(@class, 'block_sponsors')]//img[contains(@src, 'pluginfile.php') and @alt='First Sponsor']" "xpath_element" should be identical to "blocks/sponsors/tests/fixtures/bookmark-new.png"
+    Then the image at "First Sponsor" "block_sponsors > Sponsor Image" should be identical to "blocks/sponsors/tests/fixtures/bookmark-new.png"
     And I configure the "My sponsor" block
     And I upload "blocks/sponsors/tests/fixtures/document-edit.png" file to "Organisation 2 logo" filemanager
     And I press "Save changes"
-    Then the image at "//*[contains(@class, 'block_sponsors')]//img[contains(@src, 'pluginfile.php') and @alt='Second Sponsor']" "xpath_element" should be identical to "blocks/sponsors/tests/fixtures/document-edit.png"
+    Then the image at "Second Sponsor" "block_sponsors > Sponsor Image" should be identical to "blocks/sponsors/tests/fixtures/document-edit.png"
